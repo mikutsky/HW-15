@@ -1,16 +1,11 @@
-function _createPost(
-  post,
-  authorName = "incognito",
-  comments = [],
-  users = []
-) {
+function _createPost(post, author = { username: "Incognito" }, comments = []) {
   const div_cardPost = document.createElement("div");
   div_cardPost.classList.add("card");
   div_cardPost.dataset.postId = post.id;
 
   const div_cardHead = document.createElement("div");
   div_cardHead.classList.add("card-header");
-  div_cardHead.innerHTML = `Post by <a href="#">${authorName}</a>
+  div_cardHead.innerHTML = `Post by <a href="#">${author.username}</a>
     , left <a href="#">${comments.length}</a> comments`;
 
   const div_cardBody = document.createElement("div");
@@ -23,7 +18,11 @@ function _createPost(
   btn_author.classList.add("btn", "btn-primary", "btn-sm");
   btn_author.textContent = "Aboute the author";
   btn_author.addEventListener("click", el => {
-    _createComments(el.target.closest("[data-post-id]").dataset.postId);
+    const commentsAuthor = el.target
+      .closest("[data-post-id]")
+      .querySelector(".about-author");
+    if (commentsAuthor) commentsAuthor.remove();
+    else _createAbout(author, el.target.closest("[data-post-id]"));
   });
 
   const btn_comments = document.createElement("button");
@@ -31,11 +30,11 @@ function _createPost(
   btn_comments.classList.add("btn", "btn-primary", "btn-sm");
   btn_comments.textContent = "Comments";
   btn_comments.addEventListener("click", el => {
-    _createComments(
-      comments,
-      el.target.closest("[data-post-id]"),
-      el.target.closest("[data-post-id]").dataset.postId
-    );
+    const commentsContainer = el.target
+      .closest("[data-post-id]")
+      .querySelector(".comments-container");
+    if (commentsContainer) commentsContainer.remove();
+    else _createComments(comments, el.target.closest("[data-post-id]"));
   });
 
   div_cardBody.appendChild(btn_author);
@@ -46,21 +45,32 @@ function _createPost(
   return div_cardPost;
 }
 
-function _createAbout(id) {
-  console.log(id);
+function _createAbout(author, parent) {
+  const div_author = document.createElement("div");
+  div_author.className = "about-author";
+
+  div_author.innerHTML = `</br><p>
+  <strong>name:</strong> ${author.name}</br>
+  <strong>phone:</strong> ${author.phone}</br>
+    <strong>web:</strong> ${author.website}</br>
+  <strong>email:</strong> ${author.email}
+  </p>`;
+
+  parent.querySelector(".card-header").appendChild(div_author);
 }
 
-function _createComments(comments, parent, id) {
+function _createComments(comments, parent) {
   const div_coments = document.createElement("div");
+  div_coments.className = "comments-container";
   comments.forEach(comment => {
-    if (comment.postId === id) {
-      const div_comm = document.createElement("div");
-      div_comm.classList.add("card-footer");
-      div_comm.textContent = comment.body;
-    }
+    const div_comm = document.createElement("div");
+    div_comm.classList.add("card-footer");
+    div_comm.innerHTML = `<h6>${comment.name}</h6>
+      <p style="font-style: italic;">${comment.email}</p>
+      <p>${comment.body}</p>`;
+    div_coments.appendChild(div_comm);
   });
   parent.appendChild(div_coments);
-  console.log(id);
 }
 
 function firstPosts(parent, content, postsCount = 10) {
@@ -69,7 +79,10 @@ function firstPosts(parent, content, postsCount = 10) {
     fragment.appendChild(
       _createPost(
         content.posts[i],
-        content.authors[content.posts[i].userId].username
+        content.authors[content.posts[i].userId],
+        content.comments.filter(
+          comment => comment.postId === content.posts[i].id
+        )
       )
     );
 
@@ -98,7 +111,10 @@ function firstPosts(parent, content, postsCount = 10) {
       nextfragm.appendChild(
         _createPost(
           content.posts[i],
-          content.authors[content.posts[i].userId].username
+          content.authors[content.posts[i].userId],
+          content.comments.filter(
+            comment => comment.postId === content.posts[i].id
+          )
         )
       );
     parent.insertBefore(nextfragm, el.target);

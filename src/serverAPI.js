@@ -5,22 +5,10 @@ function _error(err, str) {
   return alert(`${str}\n${err}`);
 }
 
-function _getPostsArr() {
-  return fetch(url + "/posts")
+function _request(key) {
+  return fetch(url + key)
     .then(response => response.json())
-    .catch(err => _error(err, "Error in getPostsArr()"));
-}
-
-function _getAuthorsArr() {
-  return fetch(url + "/users")
-    .then(response => response.json())
-    .catch(err => _error(err, "Error in getAuthorsArr()"));
-}
-
-function _getCommentsArr() {
-  return fetch(url + "/comments")
-    .then(response => response.json())
-    .catch(err => _error(err, "Error in getCommentsArr()"));
+    .catch(err => _error(err, `Error in _requst(${key})`));
 }
 
 function loadContent() {
@@ -28,14 +16,14 @@ function loadContent() {
   let authors = [];
   let comments = [];
 
-  return _getPostsArr()
+  return _request("/posts")
     .then(json => {
       posts = json;
-      return _getAuthorsArr();
+      return _request("/users");
     })
     .then(json => {
       authors = json;
-      return _getCommentsArr();
+      return _request("/comments");
     })
     .then(json => {
       comments = json;
