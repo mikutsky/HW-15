@@ -1,0 +1,36 @@
+{
+  "name": "hw-14",
+  "version": "1.0.0",
+  "description": "homework#14",
+  "main": "app.js",
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikutsky/HW-14.git"
+  },
+  "author": "mikutsky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikutsky/HW-14/issues"
+  },
+  "homepage": "https://github.com/mikutsky/HW-14#readme",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "bootstrap": "^4.3.1"
+  }
+}

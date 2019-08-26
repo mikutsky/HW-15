@@ -1,0 +1,11 @@
+body {
+  background-color: lightslategray;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.btn {
+  margin-right: 0.2rem !important;
+}
